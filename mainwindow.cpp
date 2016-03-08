@@ -24,7 +24,8 @@ int count = 0;
 
 //}
 cv::Mat frame;
-int array[10][10] = {
+int const mapSize = 10;
+int array[mapSize][mapSize] = {
 
         { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
         { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -38,7 +39,7 @@ int array[10][10] = {
         { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     };
     //initialise arrayNExt with zeros
-    int arrayNext[30][30];
+    int arrayNext[3*mapSize][3*mapSize];
 
     //int goastArray[30][30];
     //for (int i = 0; i < 30; ++i){
@@ -48,16 +49,16 @@ int array[10][10] = {
     //	}
     //}
     //0-10, 0-10
-    int ghostArray[30][30];
-int mapSize = 10;
+    int ghostArray[3*mapSize][3*mapSize];
+
 
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    for (int i = 0; i < 30; ++i){
-        for (int j = 0; j < 30; ++j){
+    for (int i = 0; i < 3*mapSize; ++i){
+        for (int j = 0; j < 3*mapSize; ++j){
             arrayNext[i][j] = 0;
         }
 
@@ -78,66 +79,66 @@ void MainWindow::updateGUI(){
 
     //set ghoast array to current array
 
-    for (int i = 0; i < 10; ++i){
-        for (int j = 0; j < 10; ++j)
+    for (int i = 0; i < mapSize; ++i){
+        for (int j = 0; j < mapSize; ++j)
             ghostArray[i][j] = array[i][j];
     }
-    //10-20, 0-10
-    for (int i = 10; i < 20; ++i){
-        for (int j = 0; j < 10; ++j)
-            ghostArray[i][j] = array[i-10][j];
+    //10-2*mapSize, 0-10
+    for (int i = mapSize; i < 2*mapSize; ++i){
+        for (int j = 0; j < mapSize; ++j)
+            ghostArray[i][j] = array[i-mapSize][j];
     }
-    //0-30, 0-10
-    for (int i = 10; i < 20; ++i){
-        for (int j = 0; j < 10; ++j)
-            ghostArray[i][j] = array[i - 10][j];
+    //0-3*mapSize, 0-10
+    for (int i = mapSize; i < 2*mapSize; ++i){
+        for (int j = 0; j < mapSize; ++j)
+            ghostArray[i][j] = array[i - mapSize][j];
     }
-    //20-30, 0-10
-    for (int i = 20; i < 30; ++i){
-        for (int j = 0; j < 10; ++j)
-            ghostArray[i][j] = array[i - 20][j];
+    //2*mapSize-3*mapSize, 0-10
+    for (int i = 2*mapSize; i < 3*mapSize; ++i){
+        for (int j = 0; j < mapSize; ++j)
+            ghostArray[i][j] = array[i - 2*mapSize][j];
     }
-    //0-10, 10-20
-    for (int i = 0; i < 10; ++i){
-        for (int j = 10; j < 20; ++j)
-            ghostArray[i][j] = array[i][j - 10];
+    //0-10, 10-2*mapSize
+    for (int i = 0; i < mapSize; ++i){
+        for (int j = mapSize; j < 2*mapSize; ++j)
+            ghostArray[i][j] = array[i][j - mapSize];
     }
-    //0-10, 20-30
-    for (int i = 0; i < 10; ++i){
-        for (int j = 20; j < 30; ++j)
-            ghostArray[i][j] = array[i][j - 20];
+    //0-10, 2*mapSize-3*mapSize
+    for (int i = 0; i < mapSize; ++i){
+        for (int j = 2*mapSize; j < 3*mapSize; ++j)
+            ghostArray[i][j] = array[i][j - 2*mapSize];
     }
-    //20-30, 20-30
-    for (int i = 20; i < 30; ++i){
-        for (int j = 20; j < 30; ++j)
-            ghostArray[i][j] = array[i-20][j - 20];
+    //2*mapSize-3*mapSize, 2*mapSize-3*mapSize
+    for (int i = 2*mapSize; i < 3*mapSize; ++i){
+        for (int j = 2*mapSize; j < 3*mapSize; ++j)
+            ghostArray[i][j] = array[i-2*mapSize][j - 2*mapSize];
     }
-    //10-20, 10-20
-    for (int i = 10; i < 20; ++i){
-        for (int j = 10; j < 20; ++j)
-            ghostArray[i][j] = array[i - 10][j - 10];
+    //10-2*mapSize, 10-2*mapSize
+    for (int i = mapSize; i < 2*mapSize; ++i){
+        for (int j = mapSize; j < 2*mapSize; ++j)
+            ghostArray[i][j] = array[i - mapSize][j - mapSize];
     }
-    //10-20, 20-30
-    for (int i = 10; i < 20; ++i){
-        for (int j = 20; j < 30; ++j)
-            ghostArray[i][j] = array[i - 10][j - 20];
+    //10-2*mapSize, 2*mapSize-3*mapSize
+    for (int i = mapSize; i < 2*mapSize; ++i){
+        for (int j = 2*mapSize; j < 3*mapSize; ++j)
+            ghostArray[i][j] = array[i - mapSize][j - 2*mapSize];
     }
-    //20-30, 20-30
-    for (int i = 20; i < 30; ++i){
-        for (int j = 20; j < 30; ++j)
-            ghostArray[i][j] = array[i - 20][j - 20];
+    //2*mapSize-3*mapSize, 2*mapSize-3*mapSize
+    for (int i = 2*mapSize; i < 3*mapSize; ++i){
+        for (int j = 2*mapSize; j < 3*mapSize; ++j)
+            ghostArray[i][j] = array[i - 2*mapSize][j - 2*mapSize];
     }
-    //20-30, 10-20
-    for (int i = 20; i < 30; ++i){
-        for (int j = 10; j < 20; ++j)
-            ghostArray[i][j] = array[i - 20][j - 10];
+    //2*mapSize-3*mapSize, mapSize-2*mapSize
+    for (int i = 2*mapSize; i < 3*mapSize; ++i){
+        for (int j = mapSize; j < 2*mapSize; ++j)
+            ghostArray[i][j] = array[i - 2*mapSize][j - mapSize];
     }
 
 
 
     //shou ghost array middle
-    for (int i = 10; i < 20; ++i){
-        for (int j = 10; j < 20; ++j){
+    for (int i = mapSize; i < 2*mapSize; ++i){
+        for (int j = mapSize; j < 2*mapSize; ++j){
             std::cout << ghostArray[i][j];
 
             std::cout << " ";
@@ -148,8 +149,8 @@ void MainWindow::updateGUI(){
 
     //apply rules
     int neighbours;
-    for (int i = 10; i <20; ++i){
-        for (int j = 10; j <20; ++j){
+    for (int i = mapSize; i <2*mapSize; ++i){
+        for (int j = mapSize; j <2*mapSize; ++j){
             neighbours = ghostArray[i + 1][j] + ghostArray[i][j + 1] + ghostArray[i + 1][j + 1] + ghostArray[i - 1][j - 1] + ghostArray[i - 1][j] + ghostArray[i][j - 1] + ghostArray[i + 1][j - 1]+ghostArray[i-1][j + 1];
 
 
@@ -173,21 +174,21 @@ void MainWindow::updateGUI(){
 
         }
     //display new array
-    for (int i = 10; i < 20; ++i){
-        for (int j = 10; j < 20; ++j){
+    for (int i = mapSize; i < 2*mapSize; ++i){
+        for (int j = mapSize; j < 2*mapSize; ++j){
 
             std::cout << arrayNext[i][j];
-            array[i-10][j-10] = arrayNext[i][j];
+            array[i-mapSize][j-mapSize] = arrayNext[i][j];
             std::cout << " ";
         }
         std::cout << endl;
     }
     std::cout << endl;
 
-    for (int i = 10; i < 20; ++i){
-        for (int j = 10; j < 20; ++j){
+    for (int i = mapSize; i < 2*mapSize; ++i){
+        for (int j = mapSize; j < 2*mapSize; ++j){
             if(arrayNext[i][j]==1){
-                arrayNext[i][j]=255;
+                arrayNext[i][j]=500;
             }
 
 
@@ -197,13 +198,13 @@ void MainWindow::updateGUI(){
 
 
 
-   frame =  cv::Mat(30,30,CV_32S, arrayNext);
+   frame =  cv::Mat(3*mapSize,3*mapSize,CV_32S, arrayNext);
 
-//    for (int i = 10; i < 20; ++i){
-//        for (int j = 10; j < 20; ++j){
+//    for (int i = mapSize; i < 2*mapSize; ++i){
+//        for (int j = mapSize; j < 2*mapSize; ++j){
 
 //            qDebug() << arrayNext[i][j];
-//            array[i-10][j-10] = arrayNext[i][j];
+//            array[i-mapSize][j-mapSize] = arrayNext[i][j];
 //            qDebug() << " ";
 //        }
 //        qDebug() << endl;
