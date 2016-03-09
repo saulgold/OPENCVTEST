@@ -7,6 +7,7 @@
 #include <QPicture>
 #include<iostream>
 #include <QtCore>
+
 int count = 0;
 //   timer = new QTimer(this);
 //   connect(timer,SIGNAL(timeout()),this,SLOT(on_pushButton_clicked());
@@ -24,20 +25,22 @@ int count = 0;
 
 //}
 cv::Mat frame;
-int const mapSize = 30;
-int array[mapSize][mapSize] = {
+int const mapSize = 50;
+int array[mapSize][mapSize];
+//int array[mapSize][mapSize] = {
 
-        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-        { 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0  },
-        { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0  },
-        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0  },
-        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0  },
-        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0  },
-        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0  },
-        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0  },
-        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0  },
-    };
+//        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//        { 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+//        { 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 1, 0, 0, 0, 0, 0, 0  },
+//        { 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 1, 0, 1, 0, 0, 0, 0  },
+//        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 1, 1, 0, 0, 0, 0, 0  },
+//        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 1, 0, 0  },
+//        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 1, 0  },
+//        { 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 1, 1, 1, 0  },
+//        { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0  },
+//        { 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0  },
+//    };
+
     //initialise arrayNExt with zeros
     int arrayNext[3*mapSize][3*mapSize];
 
@@ -68,7 +71,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     timer = new QTimer(this);
    connect(timer,SIGNAL(timeout()),this,SLOT(updateGUI()));
-     timer->start(200);
+     timer->start(20);
 }
 
 MainWindow::~MainWindow()
@@ -136,16 +139,7 @@ void MainWindow::updateGUI(){
 
 
 
-    //shou ghost array middle
-    for (int i = mapSize; i < 2*mapSize; ++i){
-        for (int j = mapSize; j < 2*mapSize; ++j){
-            std::cout << ghostArray[i][j];
 
-            std::cout << " ";
-        }
-        std::cout << endl;
-    }
-    std::cout << endl;
 
     //apply rules
     int neighbours;
@@ -164,11 +158,12 @@ void MainWindow::updateGUI(){
                 arrayNext[i][j] = 0;
             }
             else if (neighbours == 3){
-                arrayNext[i][j] = 1;
+                arrayNext[i][j] =1;
             }
             else if (neighbours==2)
             {
                 arrayNext[i][j] = ghostArray[i][j];
+                //arrayNext[i][j] =0;
             }
             }
 
@@ -177,29 +172,33 @@ void MainWindow::updateGUI(){
     for (int i = mapSize; i < 2*mapSize; ++i){
         for (int j = mapSize; j < 2*mapSize; ++j){
 
-            std::cout << arrayNext[i][j];
+
             array[i-mapSize][j-mapSize] = arrayNext[i][j];
-            std::cout << " ";
+
         }
-        std::cout << endl;
+
     }
-    std::cout << endl;
+
 
     for (int i = mapSize; i < 2*mapSize; ++i){
         for (int j = mapSize; j < 2*mapSize; ++j){
             if(arrayNext[i][j]==1){
-                arrayNext[i][j]=500;
+                arrayNext[i][j]=255;
             }
-            else(arrayNext[i][j]=100);
-
-
+            else if(arrayNext[i][j]==0)
+                 arrayNext[i][j]=0;
+             else if(arrayNext[i][j]==2)
+                  arrayNext[i][j]=0;
         }
 
     }
 
 
 
-   frame =  cv::Mat(3*mapSize,3*mapSize,CV_32S, arrayNext);
+   frame =  cv::Mat(3*mapSize,3*mapSize,CV_32F, arrayNext);
+   cv::Mat mask;
+   cv::inRange(frame, cv::Scalar(0,0,255), cv::Scalar(0,0,255), mask);
+   frame.setTo(cv::Scalar(100,0,100), mask);
 
 //    for (int i = mapSize; i < 2*mapSize; ++i){
 //        for (int j = mapSize; j < 2*mapSize; ++j){
@@ -223,7 +222,7 @@ void MainWindow::updateGUI(){
  QImage img = QImage((uchar*) frame.data,frame.cols,frame.rows,frame.step, QImage::Format_BGR30);
    QPixmap pix = QPixmap::fromImage(img);
 
-  ui->label->setPixmap(pix.scaled(640, 640, Qt::IgnoreAspectRatio, Qt::FastTransformation));
+  ui->label->setPixmap(pix.scaled(500, 500, Qt::IgnoreAspectRatio, Qt::FastTransformation));
 //    frame = cv::Mat(10,10,int)
 //cv::imshow("game of life",frame);
 qDebug()<<count;
@@ -240,7 +239,13 @@ void MainWindow::on_pushButton_clicked()
     //cap.open(0);
     //cv::Mat vid;
 
-
+    for (int i =0; i<mapSize;++i){
+        for(int j=0; j<mapSize; ++j){
+            if(rand()&100 >50){
+            array[i][j]=1;  }
+            else(array[i][j]=0);
+        }
+    }
 
 
 

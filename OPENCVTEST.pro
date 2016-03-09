@@ -10,7 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = OPENCVTEST
 TEMPLATE = app
-
+QMAKE_CXXFLAGS += -openmp
 
 SOURCES += main.cpp\
         mainwindow.cpp

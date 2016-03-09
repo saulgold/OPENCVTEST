@@ -8,7 +8,7 @@
 #include<iostream>
 #include <QMainWindow>
 #include <QTime>
-
+#include <omp.h>
 namespace Ui {
 class MainWindow;
 }
