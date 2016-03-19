@@ -7,6 +7,9 @@
 #include <QPicture>
 #include<iostream>
 #include <QtCore>
+#include <time.h>
+#include<QTime>
+#include<qtimer.h>
 
 int count = 0;
 //   timer = new QTimer(this);
@@ -26,7 +29,9 @@ int count = 0;
 //}
 cv::Mat frame;
 int const mapSize = 50;
-int array[mapSize][mapSize];
+
+QTime myTimer;
+cv::Scalar scalarArray[3*mapSize][3*mapSize];
 //int array[mapSize][mapSize] = {
 
 //        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -53,7 +58,7 @@ int array[mapSize][mapSize];
     //}
     //0-10, 0-10
     int ghostArray[3*mapSize][3*mapSize];
-
+    int array[mapSize][mapSize];
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -70,7 +75,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
     timer = new QTimer(this);
-   connect(timer,SIGNAL(timeout()),this,SLOT(updateGUI()));
+    connect(timer,SIGNAL(timeout()),this,SLOT(updateGUI()));
      timer->start(20);
 }
 
@@ -79,6 +84,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 void MainWindow::updateGUI(){
+//  myTimer.start();
 
     //set ghoast array to current array
 
@@ -178,15 +184,17 @@ void MainWindow::updateGUI(){
         }
 
     }
-
+//convert to colour
 
     for (int i = mapSize; i < 2*mapSize; ++i){
         for (int j = mapSize; j < 2*mapSize; ++j){
             if(arrayNext[i][j]==1){
                 arrayNext[i][j]=255;
+                scalarArray[i][j]=(255,0,255);
             }
-            else if(arrayNext[i][j]==0)
-                 arrayNext[i][j]=0;
+            else if(arrayNext[i][j]==0){
+                scalarArray[i][j]=(0,0,0);
+                 arrayNext[i][j]=0;}
              else if(arrayNext[i][j]==2)
                   arrayNext[i][j]=0;
         }
@@ -194,8 +202,7 @@ void MainWindow::updateGUI(){
     }
 
 
-
-   frame =  cv::Mat(3*mapSize,3*mapSize,CV_32F, arrayNext);
+   frame =  cv::Mat(3*mapSize,3*mapSize,CV_32F, scalarArray);
    cv::Mat mask;
    cv::inRange(frame, cv::Scalar(0,0,255), cv::Scalar(0,0,255), mask);
    frame.setTo(cv::Scalar(100,0,100), mask);
@@ -211,9 +218,9 @@ void MainWindow::updateGUI(){
 //    }
 //    qDebug() << endl;
 
-    std::string filename = "filename" +std::to_string(count)+".jpg";
+   // std::string filename = "filename" +std::to_string(count)+".jpg";
 
-    cv::imwrite(filename,frame);
+  //  cv::imwrite(filename,frame);
    //cv::cvtColor(frame, frame, CV_RGB2GRAY);
    // cv::invert(frame,frame);
     //cv::resize(frame,frame,cv::Size(),2,2);
@@ -225,10 +232,12 @@ void MainWindow::updateGUI(){
   ui->label->setPixmap(pix.scaled(500, 500, Qt::IgnoreAspectRatio, Qt::FastTransformation));
 //    frame = cv::Mat(10,10,int)
 //cv::imshow("game of life",frame);
-qDebug()<<count;
+//qDebug()<<count;
 
 //ui->label->update();
 count++;
+//qDebug()<<myTimer.elapsed();
+//qDebug()<<myTimer;
 
 
 
